@@ -1,0 +1,93 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <title>生辰八字计算器</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            text-align: center;
+        }
+
+        label {
+            display: block;
+            margin-top: 10px;
+        }
+
+        input[type="text"] {
+            padding: 5px;
+        }
+
+        button {
+            padding: 8px 16px;
+            margin-top: 10px;
+            background-color: #4CAF50;
+            color: white;
+            border: none;
+            cursor: pointer;
+        }
+
+        #result {
+            margin-top: 20px;
+            font-weight: bold;
+        }
+    </style>
+</head>
+<body>
+    <h2>生辰八字计算器</h2>
+
+    <label for="year">出生年份：</label>
+    <input type="text" id="year" placeholder="例如：1990">
+
+    <label for="month">出生月份：</label>
+    <input type="text" id="month" placeholder="例如：1">
+
+    <label for="day">出生日期：</label>
+    <input type="text" id="day" placeholder="例如：1">
+
+    <button onclick="calculateBazi()">计算</button>
+
+    <div id="result"></div>
+
+    <script>
+        function calculateBazi() {
+            var year = parseInt(document.getElementById("year").value);
+            var month = parseInt(document.getElementById("month").value);
+            var day = parseInt(document.getElementById("day").value);
+
+            if (isNaN(year) || isNaN(month) || isNaN(day)) {
+                document.getElementById("result").textContent = "请输入有效的出生年月日";
+                return;
+            }
+
+            // 天干
+            var tiangan = ["甲", "乙", "丙", "丁", "戊", "己", "庚", "辛", "壬", "癸"];
+            // 地支
+            var dizhi = ["子", "丑", "寅", "卯", "辰", "巳", "午", "未", "申", "酉", "戌", "亥"];
+
+            // 计算年干支
+            var yearTianganIndex = (year - 4) % 10;
+            var yearDizhiIndex = (year - 4) % 12;
+
+            // 计算月干支
+            var monthTianganIndex = (yearTianganIndex * 2 + (month - 1)) % 10;
+            var monthDizhiIndex = (month - 1) % 12;
+
+            // 计算日干支
+            var dayTianganIndex = (yearTianganIndex + monthTianganIndex) % 10;
+            var dayDizhiIndex = (yearDizhiIndex + monthDizhiIndex + (day - 1)) % 12;
+
+            // 计算时干支（简化策略：以日柱为准）
+            var hourTianganIndex = (dayTianganIndex * 2) % 10;
+            var hourDizhiIndex = (dayDizhiIndex * 2) % 12;
+
+            // 输出结果
+            var result = tiangan[yearTianganIndex] + dizhi[yearDizhiIndex]
+                + tiangan[monthTianganIndex] + dizhi[monthDizhiIndex]
+                + tiangan[dayTianganIndex] + dizhi[dayDizhiIndex]
+                + tiangan[hourTianganIndex] + dizhi[hourDizhiIndex];
+
+            document.getElementById("result").textContent = "生辰八字结果：" + result;
+        }
+    </script>
+</body>
+</html>
